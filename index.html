@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="ms">
+<head>
+  <meta charset="utf-8">
+  <meta name="referrer" content="no-referrer">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#512382">
+  <title>Carian Slip Pencapaian Murid | SMK PUTRAJAYA PRESINT 11(2)</title>
+  <style>
+    :root{--navy:#492079;--blue:#7543cb;--ink:#261a38;--muted:#786b8b;--line:#e9dff3;--pale:#f9f6ff;--green:#127956}
+    *{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 12% 0%,#eddcff,transparent 38%),var(--pale);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink);min-height:100vh}
+    header{background:linear-gradient(125deg,#30124e,#7034ad);color:white;text-align:center;padding:38px 16px 112px}header .icon{width:66px;height:66px;border-radius:20px;display:grid;place-items:center;border:1px solid #ffffff58;background:#ffffff1c;font-size:33px;margin:0 auto 15px}header small{font-size:11px;font-weight:800;letter-spacing:.17em;opacity:.82}h1{font-size:clamp(23px,4vw,35px);line-height:1.2;margin:8px 0}header p{margin:0;font-size:13px;letter-spacing:.02em;opacity:.92}
+    main{max-width:850px;margin:-75px auto 54px;padding:0 16px}.panel{background:white;border-radius:22px;border:1px solid #eee7f6;padding:clamp(20px,5vw,36px);box-shadow:0 20px 50px #30154d18}h2{font-size:20px;margin:0 0 8px}.desc{color:var(--muted);margin:0 0 22px}label{font-size:14px;font-weight:750;display:block;margin-bottom:9px}.search{display:flex;gap:10px}input{min-width:0;flex:1;padding:15px;border:1.5px solid #dcd0ef;border-radius:12px;font:600 16px system-ui;outline:none}input:focus{border-color:#8655dd;box-shadow:0 0 0 3px #8655dd24}button{font:700 14px system-ui;border:0;border-radius:12px;background:var(--blue);color:white;padding:14px 19px;cursor:pointer}button:hover{filter:brightness(.92)}button:disabled{opacity:.6;cursor:wait}.help{font-size:12px;color:var(--muted);margin-top:10px}.alert{margin-top:18px;padding:13px 15px;border-radius:12px;display:none;font-size:14px}.alert.on{display:block}.alert.error{background:#fff0f0;color:#a12a38;border:1px solid #f1cad0}.alert.info{background:#f1eaff;color:#613a96;border:1px solid #d9c7f3}
+    #results{display:none;border-top:1px solid var(--line);padding-top:22px;margin-top:24px}#results.on{display:block}.resultshead{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:12px}.resultshead h2{margin:0}.count{background:#eee5fa;color:#6435a8;border-radius:99px;padding:5px 12px;font-size:12px;font-weight:800}.slip{display:flex;gap:14px;align-items:center;border:1px solid var(--line);border-radius:15px;padding:15px;margin:10px 0}.fileicon{background:#f0e7ff;color:#7443c4;border-radius:12px;font-size:25px;padding:12px}.details{min-width:0;flex:1}.details strong{display:block;font-size:16px}.details small{display:block;font-size:12px;color:var(--muted);overflow-wrap:anywhere}.actions{display:flex;gap:8px;flex-wrap:wrap}.actions button{padding:10px 13px;font-size:12px}.actions .down{background:#217f70}.warn{font-size:12px;color:#a34819;margin-top:5px}.preview{display:none;margin-top:25px;border-top:1px solid var(--line);padding-top:24px}.preview.on{display:block}.previewtop{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}.previewtop h2{margin:0}.preview iframe{border:1px solid var(--line);background:#eef1f6;border-radius:12px;width:100%;height:min(75vh,720px);min-height:430px;margin-top:14px}.close{background:#f0e7fa;color:#512382}.security{border-radius:10px;background:#f9fafc;padding:12px 14px;color:var(--muted);font-size:12px;margin-top:22px}footer{text-align:center;color:#75839a;font-size:12px;padding:0 14px 30px}
+    @media(max-width:600px){.search{flex-direction:column}.search button{width:100%}.slip{align-items:flex-start;flex-wrap:wrap}.actions{width:100%}.actions button{flex:1}.preview iframe{min-height:440px;height:65vh}}
+  </style>
+</head>
+<body>
+<header><div class="icon" aria-hidden="true">🎓</div><small>PORTAL SEMAKAN PENCAPAIAN</small><h1>Sistem Carian Slip Murid</h1><p>SMK PUTRAJAYA PRESINT 11(2)</p></header>
+<main><div class="panel">
+  <h2>Semak slip pencapaian</h2>
+  <p class="desc">Masukkan nombor kad pengenalan murid. Semua slip pentaksiran yang sepadan akan disenaraikan mengikut tahun untuk dilihat atau dimuat turun.</p>
+  <form id="form"><label for="ic">Nombor Kad Pengenalan Murid</label><div class="search"><input id="ic" type="text" inputmode="numeric" autocomplete="off" maxlength="14" placeholder="Contoh: 120101011234" required><button id="searchBtn" type="submit">🔎 Cari Semua Slip</button></div><div class="help">Masukkan 12 digit nombor KP, dengan atau tanpa sempang.</div></form>
+  <div id="alert" class="alert" role="status" aria-live="polite"></div>
+  <section id="results" aria-label="Slip pentaksiran"><div class="resultshead"><h2>Senarai Slip Dijumpai</h2><span id="count" class="count"></span></div><div id="list"></div></section>
+  <section id="preview" class="preview" aria-label="Pratonton PDF"><div class="previewtop"><h2 id="previewTitle">Pratonton Slip</h2><button id="close" class="close" type="button">Tutup Paparan</button></div><iframe id="viewer" title="Pratonton slip PDF"></iframe><p class="help">Jika PDF tidak boleh dipaparkan pada peranti, gunakan butang Muat Turun.</p></section>
+  <div class="security">🔒 Slip mengandungi maklumat peribadi. Gunakan hanya untuk menyemak slip sendiri atau murid di bawah jagaan anda. Pentadbir sekolah perlu meluluskan penggunaan carian menggunakan nombor KP sahaja.</div>
+</div></main><footer>© <span id="year"></span> SMK PUTRAJAYA PRESINT 11(2) · Sistem Semakan Slip Pencapaian</footer>
+<script>
+'use strict';
+// URL Web App rasmi sekolah (sila pastikan deployment menggunakan Code.gs dalam pakej ini).
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzaQm8c573i8wx0s2kVwDSfn-UoDaFLsR5m3TBrhWyYNZmtdWFmIFxYQUtpEwxV-ltS/exec';
+const $=s=>document.querySelector(s);
+const form=$('#form'), input=$('#ic'), searchBtn=$('#searchBtn'), list=$('#list'),results=$('#results'), preview=$('#preview'),viewer=$('#viewer');
+const state={ic:'',searchId:0,blobUrl:null,busy:false};
+$('#year').textContent=new Date().getFullYear();
+function alertMsg(msg,type='error'){$('#alert').textContent=msg;$('#alert').className='alert on '+type;}
+function clearAlert(){$('#alert').className='alert';$('#alert').textContent='';}
+function clearPreview(){preview.classList.remove('on');viewer.removeAttribute('src');if(state.blobUrl){URL.revokeObjectURL(state.blobUrl);state.blobUrl=null;}}
+function configured(){return /^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]+\/exec(?:\?.*)?$/.test(SCRIPT_URL);}
+function jsonp(params,ms=45000){return new Promise((resolve,reject)=>{
+ const cb='slipV2_'+Date.now()+'_'+Math.floor(Math.random()*1000000);const s=document.createElement('script');let done=false;
+ const timeout=setTimeout(()=>finish(new Error('Sambungan mengambil masa terlalu lama. Cuba lagi.')),ms);
+ function finish(err,value){if(done)return;done=true;clearTimeout(timeout);delete window[cb];s.remove();if(err)reject(err);else resolve(value);}
+ window[cb]=v=>finish(null,v);s.onerror=()=>finish(new Error('Sambungan Apps Script gagal. Semak URL, deployment dan akses Web App.'));
+ s.src=SCRIPT_URL+(SCRIPT_URL.includes('?')?'&':'?')+new URLSearchParams({...params,callback:cb,_t:Date.now()});document.head.appendChild(s);
+});}
+function makeButton(text,cls,handler,disabled=false){const b=document.createElement('button');b.type='button';b.textContent=text;b.className=cls||'';b.disabled=disabled;if(!disabled)b.addEventListener('click',handler);return b;}
+function busy(v){state.busy=v;searchBtn.disabled=v;searchBtn.textContent=v?'Sedang mencari…':'🔎 Cari Semua Slip';}
+function b64ToBlob(b64){const arr=[];const slice=32768;for(let p=0;p<b64.length;p+=slice){const str=atob(b64.slice(p,p+slice));const bytes=new Uint8Array(str.length);for(let i=0;i<str.length;i++)bytes[i]=str.charCodeAt(i);arr.push(bytes);}return new Blob(arr,{type:'application/pdf'});}
+async function loadPdf(item,mode,btn){if(state.busy)return;const mySearch=state.searchId;state.busy=true;btn.disabled=true;clearAlert();
+ try{let chunks=[],total=1;for(let part=0;part<total;part++){
+  alertMsg('Memuatkan '+item.label+' — bahagian '+(part+1)+' daripada '+total+'…','info');
+  const d=await jsonp({action:'pdf',ic:state.ic,fileId:item.fileId,part:String(part)},65000);
+  if(!d||!d.ok)throw new Error(d?.message||'PDF tidak dapat diperoleh.');
+  if(d.part!==part||!Number.isSafeInteger(d.total)||d.total<1||d.total>100)throw new Error('Data PDF tidak lengkap.');
+  if(part===0)total=d.total;else if(d.total!==total)throw new Error('Fail berubah ketika dimuatkan. Cuba lagi.');
+  chunks.push(d.data);
+ }
+ if(mySearch!==state.searchId)return;
+ const blob=b64ToBlob(chunks.join(''));
+ if(mode==='download'){
+  const url=URL.createObjectURL(blob), a=document.createElement('a');a.href=url;a.download=item.filename;a.style.display='none';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),60000);
+ }else{
+  clearPreview();state.blobUrl=URL.createObjectURL(blob);viewer.src=state.blobUrl;$('#previewTitle').textContent='Pratonton: '+item.label;preview.classList.add('on');preview.scrollIntoView({behavior:'smooth',block:'start'});
+ }
+ clearAlert();
+ }catch(err){if(mySearch===state.searchId)alertMsg(err.message||'Ralat mendapatkan PDF.');}
+ finally{state.busy=false;btn.disabled=false;}
+}
+function render(items){list.replaceChildren();for(const item of items){
+ const row=document.createElement('article');row.className='slip';const icon=document.createElement('div');icon.className='fileicon';icon.textContent='📄';
+ const detail=document.createElement('div');detail.className='details';const name=document.createElement('strong');name.textContent=item.label;const small=document.createElement('small');small.textContent=item.filename;detail.append(name,small);
+ if(item.tooLarge){const warn=document.createElement('div');warn.className='warn';warn.textContent='Fail terlalu besar untuk dipaparkan; hubungi pentadbir.';detail.append(warn);}
+ const actions=document.createElement('div');actions.className='actions';actions.append(makeButton('👁 Lihat PDF','',e=>loadPdf(item,'preview',e.currentTarget),item.tooLarge),makeButton('⬇ Muat Turun','down',e=>loadPdf(item,'download',e.currentTarget),item.tooLarge));
+ row.append(icon,detail,actions);list.appendChild(row);
+}}
+form.addEventListener('submit',async e=>{e.preventDefault();if(state.busy)return;clearPreview();results.classList.remove('on');clearAlert();
+ const ic=input.value.replace(/[\s-]/g,'');if(!/^\d{12}$/.test(ic)){alertMsg('Sila masukkan nombor kad pengenalan 12 digit.');return;}
+ if(!configured()){alertMsg('Pentadbir belum memasukkan URL Web App Apps Script di dalam index.html.');return;}
+ state.ic=ic;state.searchId++;busy(true);alertMsg('Sedang mencari semua slip pentaksiran dalam Google Drive…','info');
+ try{const d=await jsonp({action:'search',ic});if(!d||!d.ok)throw new Error(d?.message||'Carian gagal.');
+ if(!Array.isArray(d.slips))throw new Error('Format hasil carian tidak sah.');
+ if(d.slips.length===0){alertMsg('Tiada slip dijumpai bagi nombor KP tersebut. Semak nombor atau hubungi pihak sekolah.','info');return;}
+ $('#count').textContent=d.slips.length+' slip';render(d.slips);results.classList.add('on');clearAlert();
+ }catch(err){alertMsg(err.message||'Ralat carian. Cuba lagi.');}finally{busy(false);}
+});
+$('#close').addEventListener('click',clearPreview);
+</script>
+</body>
+</html>
